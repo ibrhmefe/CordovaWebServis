@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    
+</head>
+<script type="text/javascript" src="../egitimApp/www/js/jquery-3.2.1.min.js"></script>
+<body>
+    <form id="kullanici_giris_form" method="post" action="#">
+            isim
+            <input type="text" id="isim" required>
+            E-mail adresin
+            <input type="email" id="email" required>
+            Şifren
+            <input type="password" id="sifre" required>
+            <div style="background: yellow; width: 65px;" id="btnGiris">Giriş Yap</div>
+            <div style="background: blueviolet; width: 65px;" id="btnKayit">Kayıt Ol</div>
+    </form>
+</body>
+<script>
+    var url = "http://192.168.1.8/CordovaWebServis/baglan.php";
+    /* Web servisimizin bulunduğu urlyi oluşturduk. */
+    $(document).ready(function () {
+        /* Jquery kodlarını çalıştırmamız için gerekli kod. Sayfanın hazır olduğunu kontrol ediyoruz. */
+        $('#btnGiris').click(function(){
+            /* btnGiris idli butona tıkladığımızda ajax fonksiyonumuzu çalıştırıyoruz. */
+            var email = $('#email').val();
+            var sifre = $('#sifre').val();
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {"islem": "kullanici_giris", "email": email, "sifre": sifre},
+                success: function (cevap) {
+                    if(cevap[0].sonuc == "0"){
+                        // Hata oluştu
+                        alert("Bir Hata Oluştu!");
+                    } else {
+                        /* İşlem başarılı */
+                        alert(cevap[0].id + " / " + cevap[0].isim);
+                    }
+                }
+            });
+        });
+
+        $('#btnKayit').click(function(){
+            /* btnKayit idli butona tıkladığımızda ajax fonksiyonumuzu çalıştırıyoruz. */
+            var isim = $('#isim').val();
+            var email = $('#email').val();
+            var sifre = $('#sifre').val();
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {"islem": "kullanici_kayit", "isim": isim, "email": email, "sifre": sifre},
+                success: function (cevap) {
+                    if(cevap[0].sonuc == "0"){
+                        // Hata oluştu
+                        alert("Bir Hata Oluştu!");
+                    } else {
+                        /* İşlem başarılı */
+                        alert("Başarıyla kayıt edilmiştir");
+                    }
+                }
+            });
+        });
+    });
+</script>
+</html>
