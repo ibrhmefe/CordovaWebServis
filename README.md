@@ -1,4 +1,4 @@
-![resim](https://raw.githubusercontent.com/ibrhmefe/Web-Servis/main/resim1.png)
+![resim](https://raw.githubusercontent.com/ibrhmefe/CordovaWebServis/main/apache%20logo.png)
 
 Uygulamamız içerisinde kullanıcı giriş ekranı tasarlıyoruz. Peki ya kullanıcılar nerede?
 
@@ -7,7 +7,7 @@ MySql’de bulunan kulanıcılar tablosunda sorgu yapmamız gerekiyor. Bunun iç
 
 Öncelikle tablomuzu tasarlayalım.
 
-![resim](https://raw.githubusercontent.com/ibrhmefe/Web-Servis/main/resim1.png)
+![resim](https://raw.githubusercontent.com/ibrhmefe/CordovaWebServis/main/resim1.jpg)
 
 Gerekli alanlarımız yalnızca bunlar. Web servisler hakkında bilginiz yoksa, Web Servis Nedir? isimli blogumda paylaştığım notlara baktıktan sonra devam etmenizi öneririm.
 
