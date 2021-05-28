@@ -9,7 +9,7 @@ MySql’de bulunan kulanıcılar tablosunda sorgu yapmamız gerekiyor. Bunun iç
 
 ![resim](https://raw.githubusercontent.com/ibrhmefe/CordovaWebServis/main/resim1.jpg)
 
-Gerekli alanlarımız yalnızca bunlar. Web servisler hakkında bilginiz yoksa, Web Servis Nedir? isimli blogumda paylaştığım notlara baktıktan sonra devam etmenizi öneririm.
+Gerekli alanlarımız yalnızca bunlar. Web servisler hakkında bilginiz yoksa, [Web Servis Nedir?](http://ibrahimefee.blogspot.com/2021/05/web-servis-nedir-web-servislerinin-ne.html) isimli blogumda paylaştığım notlara baktıktan sonra devam etmenizi öneririm.
 
 
 ## Web Servis ( baglan.php )
