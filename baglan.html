@@ -2,23 +2,75 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    
 </head>
+<style>
+    form {
+        float: left;
+        width: 300px;
+        margin: 0 calc( 50% - 150px);
+        background: #ddd;
+        padding: 20px;
+        box-sizing: border-box;
+        border-radius: 10px;
+    }
+    
+    input {
+        float: left;
+        width: 100%;
+        margin: 10px 0 20px;
+    }
+    
+    form > div {
+        float: left;
+        background: white;
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    
+    form > span {
+        float: left;
+        width: 100%;
+    }
+
+    #kullanici_bilgiler {
+        float: left;
+        width: 50%;
+        margin: 40px 25%;
+    }
+
+    #kullanici_bilgiler > div {
+        float: left;
+        width: 25%;
+        text-align: center;
+        color: red;
+    }
+</style>
 <script type="text/javascript" src="../egitimApp/www/js/jquery-3.2.1.min.js"></script>
 <body>
-    <form id="kullanici_giris_form" method="post" action="#">
-            isim
+    <div id="kullanici_bilgiler">
+        <div id="kullanici_id"></div>
+        <div id="kullanici_isim"></div>
+        <div id="kullanici_email"></div>
+        <div id="kullanici_sifre"></div>
+    </div>
+    <form method="post" action="#">
+            <span>İsim</span>
             <input type="text" id="isim" required>
-            E-mail adresin
+            <span>E-mail adresin</span>
             <input type="email" id="email" required>
-            Şifren
+            <span>Şifren</span>
             <input type="password" id="sifre" required>
-            <div style="background: yellow; width: 65px;" id="btnGiris">Giriş Yap</div>
-            <div style="background: blueviolet; width: 65px;" id="btnKayit">Kayıt Ol</div>
+            <div id="btnGiris">Giriş Yap</div>
+            <div id="btnKayit" style="margin: 0 10px;">Kayıt Ol</div>
+            <div style="display: none;" id="btnSil">Hesabı Sil</div>
+            <div style="display: none;" id="btnGuncelle">Hesabı Guncelle</div>
     </form>
 </body>
 <script>
     var url = "http://192.168.1.8/CordovaWebServis/baglan.php";
+    var kullanici_id = "";
     /* Web servisimizin bulunduğu urlyi oluşturduk. */
     $(document).ready(function () {
         /* Jquery kodlarını çalıştırmamız için gerekli kod. Sayfanın hazır olduğunu kontrol ediyoruz. */
@@ -37,14 +89,22 @@
                         alert("Bir Hata Oluştu!");
                     } else {
                         /* İşlem başarılı */
-                        alert(cevap[0].id + " / " + cevap[0].isim);
+                        $('#kullanici_id').html("Id: " + cevap[0].id);
+                        $('#kullanici_isim').html("İsim: " + cevap[0].isim);
+                        $('#kullanici_email').html("E mail: " + cevap[0].e_mail);
+                        $('#kullanici_sifre').html("Şifre: " + cevap[0].sifre);
+                        /* Kullanıcı bilgilerimizi ekrana basıyoruz.
+                            Giriş yapılan kullanıcı idsini kullanici_id isimli değişkende tutuyoruz. */
+                        kullanici_id = cevap[0].id;
+                        $('#btnSil').show();
+                        $('#btnGuncelle').show();
                     }
                 }
             });
         });
 
         $('#btnKayit').click(function(){
-            /* btnKayit idli butona tıkladığımızda ajax fonksiyonumuzu çalıştırıyoruz. */
+            /* Kayıt için gerekli bilgileri formdan alıyoruz. */
             var isim = $('#isim').val();
             var email = $('#email').val();
             var sifre = $('#sifre').val();
@@ -53,13 +113,82 @@
                 url: url,
                 dataType: "json",
                 data: {"islem": "kullanici_kayit", "isim": isim, "email": email, "sifre": sifre},
+                /* Formdan aldığımız bilgileri webservise gönderiyoruz. */
+                success: function (cevap) {
+                    if(cevap[0].sonuc == "0"){
+                        // Hata oluştu
+                        alert("Bir Hata Oluştu!");
+                    } else {
+                        /* İşlem başarılı */                        
+                        $('#kullanici_id').html("Id: " + cevap[0].id);
+                        $('#kullanici_isim').html("İsim: " + cevap[0].isim);
+                        $('#kullanici_email').html("E mail: " + cevap[0].e_mail);
+                        $('#kullanici_sifre').html("Şifre: " + cevap[0].sifre);
+                        /* Kayıt edilen kullanıcının bilgilerimizi ekrana basıyoruz.
+                            Kullanıcının idsini kullanici_id isimli değişkende tutuyoruz. */
+                        kullanici_id = cevap[0].id;
+                        $('#btnSil').show();
+                        $('#btnGuncelle').show();
+                    }
+                }
+            });
+        });
+
+        $('#btnSil').click(function(){
+            var id = kullanici_id;
+            /* Aktif kullanıcımızın idsini alıyoruz. */
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {"islem": "kullanici_sil", "id": id},
+                /* Kullanıcı idmizi webservise gönderiyoruz. */
                 success: function (cevap) {
                     if(cevap[0].sonuc == "0"){
                         // Hata oluştu
                         alert("Bir Hata Oluştu!");
                     } else {
                         /* İşlem başarılı */
-                        alert("Başarıyla kayıt edilmiştir");
+                        alert("Kullanıcı silindi aktif kişi yok");
+                        $('#kullanici_id').html("");
+                        $('#kullanici_isim').html("");
+                        $('#kullanici_email').html("");
+                        $('#kullanici_sifre').html("");
+                        kullanici_id = "";
+                        $('#btnSil').hide();
+                        $('#btnGuncelle').hide();
+                        $('input').val("");
+                        /* Kullanıcı silindiği için ekrandaki tüm verilerimizi temizliyoruz. */
+                    }
+                }
+            });
+        });
+
+        $('#btnGuncelle').click(function(){
+            /* btnKayit idli butona tıkladığımızda ajax fonksiyonumuzu çalıştırıyoruz. */
+            var id = kullanici_id;
+            var isim = $('#isim').val();
+            var email = $('#email').val();
+            var sifre = $('#sifre').val();
+            $.ajax({
+                type: "post",
+                url: url,
+                dataType: "json",
+                data: {"islem": "kullanici_guncelle",
+                        "id": id,
+                        "isim": isim,
+                        "email": email,
+                        "sifre": sifre},
+                success: function (cevap) {
+                    if(cevap[0].sonuc == "0"){
+                        // Hata oluştu
+                        alert("Bir Hata Oluştu!");
+                    } else {
+                        /* İşlem başarılı */                        
+                        $('#kullanici_id').html("Id: " + id);
+                        $('#kullanici_isim').html("İsim: " + isim);
+                        $('#kullanici_email').html("E mail: " + e_mail);
+                        $('#kullanici_sifre').html("Şifre: " + sifre);
                     }
                 }
             });
